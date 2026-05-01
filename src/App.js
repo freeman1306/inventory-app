@@ -4,6 +4,7 @@ import NavigationMenu from './components/NavigationMenu';
 import TopMenu from './components/TopMenu';
 import Orders from './pages/Orders';
 import Products from './pages/Products';
+import './App.css';
 
 function App() {
   return (
