@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@apollo/client": "^4.1.9",
     "@react-aria/ssr": "^3.10.0",
     "@reduxjs/toolkit": "^2.11.2",
     "@restart/hooks": "^0.6.2",
@@ -10,6 +11,7 @@
     "bootstrap": "^5.3.8",
     "chart.js": "^4.5.1",
     "cra-template-redux": "2.0.0",
+    "graphql": "^16.13.2",
     "react": "^19.2.5",
     "react-bootstrap": "^2.10.10",
     "react-chartjs-2": "^5.3.1",
@@ -17,6 +19,7 @@
     "react-redux": "^9.2.0",
     "react-router-dom": "^7.14.2",
     "react-scripts": "5.0.1",
+    "react-window": "^2.2.7",
     "socket.io-client": "^4.8.3"
   },
   "scripts": {
@@ -53,6 +56,7 @@
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
     "@types/react-router-dom": "^5.3.3",
+    "@types/react-window": "^1.8.8",
     "@typescript-eslint/eslint-plugin": "^8.59.1",
     "@typescript-eslint/parser": "^8.59.1",
     "concurrently": "^9.2.1",

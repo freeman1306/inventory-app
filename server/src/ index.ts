@@ -1,13 +1,17 @@
 import express from 'express';
 import http from 'http';
-import { Server } from 'socket.io';
+import { Server as SocketServer } from 'socket.io';
+import { ApolloServer } from '@apollo/server';
+import { expressMiddleware } from '@apollo/server/express4';
 import cors from 'cors';
+import { typeDefs } from './schema';
+import { resolvers } from './resolvers';
 
 const app = express();
-app.use(cors());
+const httpServer = http.createServer(app);
 
-const server = http.createServer(app);
-const io = new Server(server, {
+// Socket.io
+const io = new SocketServer(httpServer, {
 	cors: {
 		origin: "http://localhost:3000",
 		methods: ["GET", "POST"]
@@ -28,11 +32,23 @@ io.on('connection', (socket) => {
 	});
 });
 
+// GraphQL
+const apolloServer = new ApolloServer({
+	typeDefs,
+	resolvers,
+});
+
+await apolloServer.start();
+
+app.use('/graphql', cors<cors.CorsRequest>(), express.json(), expressMiddleware(apolloServer));
+
 app.get('/health', (req, res) => {
 	res.json({ status: 'ok', activeSessions });
 });
 
 const PORT = 3001;
-server.listen(PORT, () => {
-	console.log(`WebSocket server running on http://localhost:${PORT}`);
+httpServer.listen(PORT, () => {
+	console.log(`🚀 Server ready at http://localhost:${PORT}`);
+	console.log(`📡 GraphQL endpoint: http://localhost:${PORT}/graphql`);
+	console.log(`🔌 WebSocket endpoint: ws://localhost:${PORT}`);
 });
