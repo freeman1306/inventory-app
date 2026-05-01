@@ -34,7 +34,9 @@
     "server": "cd server && npm run dev",
     "dev": "concurrently \"npm run server\" \"npm start\"",
     "test": "react-scripts test",
+    "test:watch": "react-scripts test --watch",
     "test:coverage": "react-scripts test --coverage",
+    "test:ci": "react-scripts test --ci --coverage --watchAll=false",
     "docker:build": "docker build -t inventory-app .",
     "docker:run": "docker run -d -p 8080:80 --name inventory inventory-app",
     "docker:stop": "docker stop inventory && docker rm inventory"
