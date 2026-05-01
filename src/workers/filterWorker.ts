@@ -1,6 +1,5 @@
 /* eslint-disable no-restricted-globals */
 
-// Этот код будет выполняться в отдельном потоке
 interface FilterMessage {
 	type: 'FILTER_PRODUCTS';
 	products: any[];
@@ -14,7 +13,6 @@ interface FilterResponse {
 	duration: number;
 }
 
-// Обработчик сообщений от основного потока
 self.addEventListener('message', (event: MessageEvent<FilterMessage>) => {
 	const { type, products, filterType, searchTerm } = event.data;
 
@@ -28,7 +26,6 @@ self.addEventListener('message', (event: MessageEvent<FilterMessage>) => {
 			filtered = filtered.filter(p => p.type === filterType);
 		}
 
-		// Поиск по названию или SN
 		if (searchTerm.trim()) {
 			const term = searchTerm.toLowerCase();
 			filtered = filtered.filter(p =>

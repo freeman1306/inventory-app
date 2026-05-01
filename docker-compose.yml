@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+  # GraphQL + WebSocket сервер
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    container_name: inventory-server
+    ports:
+      - "4000:3081"
+    environment:
+      - NODE_ENV=production
+      - PORT=3081
+    restart: unless-stopped
+    networks:
+      - inventory-network
+
+  # React клиент с Nginx
+  client:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: inventory-client
+    ports:
+      - "80:80"
+    depends_on:
+      - server
+    environment:
+      - REACT_APP_API_URL=http://server:3081
+      - REACT_APP_WS_URL=ws://server:3081
+    restart: unless-stopped
+    networks:
+      - inventory-network
+
+networks:
+  inventory-network:
+    driver: bridge

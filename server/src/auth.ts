@@ -3,12 +3,13 @@ import bcrypt from 'bcryptjs';
 
 const SECRET_KEY = 'your-secret-key-change-in-production';
 
-// Временное хранилище пользователей (в реальном проекте - БД)
+// Временное хранилище пользователей
 const users = [
 	{
 		id: 1,
 		username: 'admin',
-		password: '$2a$10$XQwvKJZzXqJ5qJ5qJ5qJ5u', // "admin123" в зашифрованном виде
+		// bcrypt.hashSync("admin123", 10)
+		password: '$2b$10$36hs0qETmjj67mD1ZSZtnuCT.AP2g0txJGT1g/rF5r21ukr70PWDe',
 		role: 'admin'
 	}
 ];
@@ -37,10 +38,9 @@ export const authenticateUser = async (username: string, password: string) => {
 	const user = users.find(u => u.username === username);
 	if (!user) return null;
 
-	// Для теста создадим хэш для admin123
-	if (username === 'admin' && password === 'admin123') {
-		return { id: user.id, username: user.username };
-	}
+	const isValid = await bcrypt.compare(password, user.password);
+	if (!isValid) return null;
 
-	return null;
+	return { id: user.id, username: user.username };
 };
+

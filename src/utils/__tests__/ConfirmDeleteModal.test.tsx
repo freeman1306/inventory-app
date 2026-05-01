@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
-import ConfirmDeleteModal from '../ConfirmDeleteModal';
+import ConfirmDeleteModal from '../../components/ConfirmDeleteModal';
 
 describe('ConfirmDeleteModal', () => {
 	const mockOnClose = jest.fn();

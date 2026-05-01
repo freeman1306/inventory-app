@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import ProductCard from '../ProductCard';
+import ProductCard from '../../components/ProductCard';
 
 const mockProduct = {
 	id: 1,

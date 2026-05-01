@@ -2,7 +2,7 @@ import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
 import { MockedProvider } from '@apollo/client/testing';
 import { BrowserRouter } from 'react-router-dom';
-import Orders from '../Orders';
+import Orders from '../../pages/Orders';
 import { GET_ORDERS } from '../../graphql/queries';
 
 const mockOrders = {

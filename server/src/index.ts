@@ -7,11 +7,13 @@ import cors from 'cors';
 import { typeDefs } from './schema';
 import { resolvers } from './resolvers';
 
-import jwt from 'jsonwebtoken';
 import { authenticateUser, generateToken, verifyToken } from './auth';
 
 const app = express();
 const httpServer = http.createServer(app);
+
+app.use(cors());
+app.use(express.json());
 
 // Socket.io
 const io = new SocketServer(httpServer, {
@@ -41,27 +43,30 @@ const apolloServer = new ApolloServer({
 	resolvers,
 });
 
-await apolloServer.start();
+const startServer = async () => {
+	await apolloServer.start();
 
-app.use('/graphql', cors<cors.CorsRequest>(), express.json(), (req, res, next) => {
-	// Добавляем user в контекст
-	(req as any).context = { user: (req as any).user };
-	next();
-}, expressMiddleware(apolloServer, {
-	context: async ({ req }) => {
-		return { user: (req as any).user };
-	}
-}));
+	app.use('/graphql', cors<cors.CorsRequest>(), express.json(), (req, res, next) => {
+		// Добавляем user в контекст
+		(req as any).context = { user: (req as any).user };
+		next();
+	}, expressMiddleware(apolloServer, {
+		context: async ({ req }: { req: express.Request }) => {
+			return { user: (req as any).user };
+		}
+	}));
+
+	const PORT = process.env.PORT || 3081;
+
+	httpServer.listen(PORT, () => {
+		console.log(`🚀 Server ready at http://localhost:${PORT}`);
+		console.log(`📡 GraphQL endpoint: http://localhost:${PORT}/graphql`);
+		console.log(`🔌 WebSocket endpoint: ws://localhost:${PORT}`);
+	});
+};
 
 app.get('/health', (req, res) => {
 	res.json({ status: 'ok', activeSessions });
-});
-
-const PORT = 3001;
-httpServer.listen(PORT, () => {
-	console.log(`🚀 Server ready at http://localhost:${PORT}`);
-	console.log(`📡 GraphQL endpoint: http://localhost:${PORT}/graphql`);
-	console.log(`🔌 WebSocket endpoint: ws://localhost:${PORT}`);
 });
 
 const authMiddleware = (req: any, res: any, next: any) => {
@@ -101,4 +106,9 @@ app.get('/verify', (req, res) => {
 
 	const decoded = verifyToken(token);
 	res.json({ valid: !!decoded, user: decoded });
+});
+
+startServer().catch((error) => {
+	console.error('Failed to start server:', error);
+	process.exit(1);
 });
