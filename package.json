@@ -24,6 +24,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
+    "server": "cd server && npm run dev",
+    "dev": "concurrently \"npm run server\" \"npm start\"",
     "docker:build": "docker build -t inventory-app .",
     "docker:run": "docker run -d -p 8080:80 --name inventory inventory-app",
     "docker:stop": "docker stop inventory && docker rm inventory"
@@ -53,6 +55,7 @@
     "@types/react-router-dom": "^5.3.3",
     "@typescript-eslint/eslint-plugin": "^8.59.1",
     "@typescript-eslint/parser": "^8.59.1",
+    "concurrently": "^9.2.1",
     "typescript": "^6.0.3"
   }
 }
