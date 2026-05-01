@@ -1,12 +1,14 @@
 ﻿import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { fetchOrders as fetchOrdersApi, deleteOrder as deleteOrderApi } from '../services/api';
+import { products as initialProducts } from '../mock/data';
 
+// отдельный slice для продуктов (создаём временно)
 export const loadOrders = createAsyncThunk('orders/load', async () => {
   const data = await fetchOrdersApi();
   return data;
 });
 
-export const removeOrder = createAsyncThunk('orders/remove', async (orderId) => {
+export const removeOrder = createAsyncThunk('orders/remove', async (orderId, { getState }) => {
   await deleteOrderApi(orderId);
   return orderId;
 });

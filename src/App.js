@@ -1,5 +1,7 @@
-﻿import React from 'react';
+﻿import React, { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { loadProducts } from './store/productsSlice';
 import NavigationMenu from './components/NavigationMenu';
 import TopMenu from './components/TopMenu';
 import Orders from './pages/Orders';
@@ -7,6 +9,12 @@ import Products from './pages/Products';
 import './App.css';
 
 function App() {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(loadProducts());
+  }, [dispatch]);
+
   return (
     <BrowserRouter>
       <div className="container-fluid">

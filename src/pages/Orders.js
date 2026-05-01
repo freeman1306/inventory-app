@@ -1,16 +1,38 @@
 ﻿import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { loadOrders } from '../store/ordersSlice';
+import { loadOrders, removeOrder } from '../store/ordersSlice';
+import { removeProductsByOrder } from '../store/productsSlice';
 import { getOrderProducts, getOrderTotalPrice, formatDate } from '../utils/orderHelpers';
+import ConfirmDeleteModal from '../components/ConfirmDeleteModal';
 
 function Orders() {
   const dispatch = useDispatch();
   const { list, loading, error } = useSelector((state) => state.orders);
+  const productsList = useSelector((state) => state.products.list);
   const [selectedOrder, setSelectedOrder] = useState(null);
+  const [deleteModal, setDeleteModal] = useState({ show: false, orderId: null, orderName: '' });
 
   useEffect(() => {
     dispatch(loadOrders());
   }, [dispatch]);
+
+  const handleDeleteClick = (orderId, orderName, e) => {
+    e.stopPropagation();
+    setDeleteModal({ show: true, orderId, orderName });
+  };
+
+  const confirmDelete = () => {
+    dispatch(removeOrder(deleteModal.orderId));
+    dispatch(removeProductsByOrder(deleteModal.orderId));
+    setDeleteModal({ show: false, orderId: null, orderName: '' });
+    if (selectedOrder && selectedOrder.id === deleteModal.orderId) {
+      setSelectedOrder(null);
+    }
+  };
+
+  const closeModal = () => {
+    setDeleteModal({ show: false, orderId: null, orderName: '' });
+  };
 
   if (loading) return <div className="p-3">Загрузка приходов...</div>;
   if (error) return <div className="p-3 text-danger">Ошибка: {error}</div>;
@@ -46,11 +68,7 @@ function Orders() {
                     </div>
                     <button
                       className="btn btn-sm btn-outline-danger ms-3"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        // TODO: открыть попап удаления
-                        console.log('delete order', order.id);
-                      }}
+                      onClick={(e) => handleDeleteClick(order.id, order.name, e)}
                     >
                       🗑️
                     </button>
@@ -91,6 +109,13 @@ function Orders() {
           </div>
         )}
       </div>
+
+      <ConfirmDeleteModal
+        show={deleteModal.show}
+        onClose={closeModal}
+        onConfirm={confirmDelete}
+        orderName={deleteModal.orderName}
+      />
     </div>
   );
 }
