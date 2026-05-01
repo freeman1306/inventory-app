@@ -1,8 +1,9 @@
 ﻿import { configureStore } from '@reduxjs/toolkit';
+import ordersReducer from './store/ordersSlice';
 
 export const store = configureStore({
   reducer: {
-    // пока пусто, добавим позже
+    orders: ordersReducer,
   },
 });
 
