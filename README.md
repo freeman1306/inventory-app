@@ -24,8 +24,37 @@
 
 ## Быстрый старт
 
-### Локальный запуск 
+### Локальный запуск
 
 ```bash
 npm install
 npm start
+
+Приложение откроется на http://localhost:3000
+
+Сборка production
+
+npm run build
+npx serve -s build
+
+Запуск в Docker
+
+# Сборка образа
+docker build -t inventory-app .
+
+# Запуск контейнера
+docker run -d -p 8080:80 --name inventory inventory-app
+Открыть http://localhost:8080
+
+PWA
+После сборки (npm run build) приложение можно установить:
+
+На Chrome: нажать на иконку "Установить" в адресной строке
+
+Или нажать на кнопку "Установить приложение" в правом нижнем углу
+
+Тестирование
+Unit-тесты: npm test
+
+Production-сборка проверяется в Docker
+```
