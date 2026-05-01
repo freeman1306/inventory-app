@@ -1,3 +1,5 @@
+/* eslint-disable no-restricted-globals */
+
 // Этот код будет выполняться в отдельном потоке
 interface FilterMessage {
 	type: 'FILTER_PRODUCTS';

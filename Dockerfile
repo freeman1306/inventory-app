@@ -3,7 +3,7 @@ FROM node:18-alpine as build
 WORKDIR /app
 
 COPY package*.json ./
-RUN npm install --silent
+RUN npm install --force --silent
 
 COPY . .
 RUN npm run build
