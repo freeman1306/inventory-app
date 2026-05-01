@@ -80,7 +80,8 @@ PWA
 
 # Клонировать репозиторий
 
-git clone <your-repo-url>
+git clone https://github.com/freeman1306/inventory-app.git
+
 cd inventory-app
 
 # Запустить всё одной командой
